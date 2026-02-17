@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <title>2025 Air Quality Visualization</title>
+  <link rel="stylesheet" href="./style.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+  
+  <div id="loading-screen">
+    <div class="loader"></div>
+    <div class="loading-text">正在加载全国数据...</div>
+  </div>
+
+  <header class="glass-panel">
+    <div class="logo">
+      <i class="fa-solid fa-wind"></i> AirVis <span>2025</span>
+    </div>
+
+    <div class="controls">
+      <div id="national-controls" style="display: flex; gap: 20px; align-items: center;">
+        <div class="control-group">
+          <label>指标监控：</label>
+          <select id="pollutant-select"></select>
+        </div>
+        <div class="control-group">
+          <label>时间轴：</label>
+          <div class="slider-wrapper">
+            <div id="date-bubble">2025-01-01</div>
+            <input type="range" id="date-slider" min="0" max="364" value="0">
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+    <div id="view-national" class="view-section">
+      
+      <div id="map-container">
+        <div id="date-picker-modal" class="glass-panel">
+          <div class="picker-header">跳转至指定日期</div>
+          <div class="picker-body">
+            <div class="picker-column" id="picker-month"></div>
+            <div class="picker-separator">-</div>
+            <div class="picker-column" id="picker-day"></div>
+          </div>
+          <button id="picker-confirm-btn">确 定</button>
+        </div>
+      </div>
+
+      <div id="sidebar-calendar-container" class="glass-panel">
+        <h4 style="margin: 0 0 10px 0; text-align: center; color: #666; font-size: 14px;">年度日历 (Calendar)</h4>
+        <div id="calendar-content"></div>
+      </div>
+
+      <div id="regional-detail-view" class="glass-panel">
+          <div class="detail-header">
+              <h2 id="drilldown-city-title">城市深度分析</h2>
+              <button id="btn-exit-drilldown">
+                  <i class="fa fa-times"></i> 返回全国地图
+              </button>
+          </div>
+          <div id="regional-dashboard" class="dashboard-grid">
+              </div>
+      </div>
+
+      <aside id="detail-panel" class="glass-panel">
+        <div class="card city-card">
+          <div class="card-header">
+            <h2 id="info-city-name">选择城市</h2>
+            <span id="info-date" class="date-badge" title="点击切换日期">2025-01-01</span>
+          </div>
+          <div class="card-body">
+            <div class="big-number">
+              <span id="info-value">--</span>
+              <span class="unit" id="info-unit">μg/m³</span>
+            </div>
+            <div class="indicator-label">当前 <span id="current-type">AQI</span> 指数</div>
+          </div>
+        </div>
+
+        <div class="card radar-card" style="flex: 1; display: flex; flex-direction: column;">
+          <div class="card-title">污染物结构分析</div>
+          <div id="radar-container" style="flex: 1; display: flex; justify-content: center; align-items: center;">
+            <p class="placeholder-text">鼠标悬浮地图城市<br>查看详细成分<br><br><small>双击城市查看深度分析</small></p>
+          </div>
+        </div>
+        
+        <div class="card legend-card">
+          <div class="card-title">地图热力图例</div>
+          <div id="legend-target" style="display: flex; justify-content: center; padding-top: 5px;"></div>
+        </div>
+      </aside>
+    </div>
+
+    <div id="creative-chart-container" style="width: 100%; flex: 1; position: relative;"></div>
+
+    <div id="view-dynamic" class="view-section hidden">
+      <div class="container" style="padding-top: 80px;">
+        <div class="main-content">
+            <div class="chart-area">
+                <div class="chart-header">
+                    <h2 id="chart-title">地区空气质量动态排名</h2>
+                    <div class="time-display">
+                        <span id="current-time">2025年1月</span>
+                        <div class="controls">
+                            <button id="play-pause" class="btn">
+                                <span id="play-icon">▶</span> 播放
+                            </button>
+                            <button id="reset" class="btn">重置</button>
+                            <div class="speed-control">
+                                <span>速度:</span>
+                                <select id="speed-select">
+                                    <option value="3000">慢</option>
+                                    <option value="2000" selected>中</option>
+                                    <option value="1000">快</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <svg id="chart" width="900" height="500"></svg>
+                </div>
+                
+                <div class="legend">
+                    <div class="legend-item"><span class="color-box" style="background:#4daf4a"></span>优 (0-50)</div>
+                    <div class="legend-item"><span class="color-box" style="background:#ffeb3b"></span>良 (51-100)</div>
+                    <div class="legend-item"><span class="color-box" style="background:#ff9800"></span>轻度污染 (101-150)</div>
+                    <div class="legend-item"><span class="color-box" style="background:#f44336"></span>中度污染 (151-200)</div>
+                    <div class="legend-item"><span class="color-box" style="background:#9c27b0"></span>重度污染 (201-300)</div>
+                    <div class="legend-item"><span class="color-box" style="background:#673ab7"></span>严重污染 (300+)</div>
+                </div>
+            </div>
+            
+            <div class="control-panel">
+                <div class="panel-section">
+                    <h3></h3>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script type="module" src="./main.js"></script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+{
+  "name": "air-vis-2025",
+  "version": "1.0.0",
+  "source": "src/index.html",
+  "scripts": {
+    "start": "parcel src/index.html --port 3000",
+    "build": "parcel build src/index.html --dist-dir dist"
+  },
+  "staticFiles": {
+    "staticPath": "data",
+    "staticOutPath": "data"
+  },
+  "dependencies": {
+    "d3": "^7.8.5"
+  },
+  "devDependencies": {
+    "parcel": "^2.9.3",
+    "parcel-reporter-static-files-copy": "^1.5.3",
+    "process": "^0.11.10"
+  }
+}
